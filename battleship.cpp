@@ -13,42 +13,45 @@ essentially sets the game up.
 ---------------------------------------*/
 battleship::battleship(ifstream& in)
 {
-	char c;
-
+	char temp;
 	for(int i = 0; i < ROWS; i++)
    		for(int j = 0; j < COLUMNS; j++){
-    		in >> c;
-    		if(c == '1')
+    		in >> temp;
+    		if(temp == '1')
     			solutionGrid[i][j] = 1;
-      		if(c == '0')
+      		if(temp == '0')
         		solutionGrid[i][j] = 0;
     }
-	
-	for(int c = 0; c < ROWS; c++)
+	for(int i = 0; i < ROWS; i++)
 		for(int j = 0; j < COLUMNS; j++)
-			playerGrid[j][c] = ' ';
-	
+			playerGrid[i][j] = ' ';
 	maxMoves = 20;
 	movesMade = 0;
-
 }
 /*---------------------------------------
-FUNCTION NAME:
-PARAMETER(S):
-RETURN TYPE:
-POSTCONDITION(S):
+FUNCTION NAME:fire
+PARAMETER(S):char and int
+RETURN TYPE:char
+POSTCONDITION(S):Takes in two values, a char an an int.
+It recieves the char value and converts it into an int 
+and uses the other int variable (-1) and uses that as the 
+position for solutionGrid array to see if there is a match.
+If there is a match, it increases moves made and returns
+H. If it misses, it returns a miss and still increments moves
+made. If it is out of bounds, it returns E and does not 
+increment movesmade. 
 ---------------------------------------*/
 char battleship::fire(char x, int y)
 {
 	int a = x - 65;
 	y -= 1;
 	bool alreadyHit = false;
+	
 	if(playerGrid[a][y] != ' ')
 		alreadyHit = true;
 
-	if(a > 9 or a < 0 or y > 9 or y < 0 or alreadyHit){
+	if(a > 9 or a < 0 or y > 9 or y < 0 or alreadyHit)
 		return 'E';
-	}
 	if(solutionGrid[a][y]){
 		playerGrid[a][y] = 'X';
 		movesMade++;
@@ -60,10 +63,16 @@ char battleship::fire(char x, int y)
 	}
 }
 /*---------------------------------------
-FUNCTION NAME:
-PARAMETER(S):
-RETURN TYPE:
-POSTCONDITION(S):
+FUNCTION NAME:isOver
+PARAMETER(S):none
+RETURN TYPE:Char
+POSTCONDITION(S):Function in general checks which state
+the game is in. It does this by constantly checking the 
+solutionGrid with the playerGrid. If all X's match, 
+the boolean gameOver is set to true and the game is read
+as won. However if the movesmade = maxmoves and the
+player hasn't hit all X's, it returns L for loss.
+Otherwise the function returns C to say game is still going on.
 ---------------------------------------*/
 char battleship::isOver() const
 {
@@ -75,7 +84,6 @@ char battleship::isOver() const
 				if(playerGrid[c][j] != 'X')
 					gameOver = false;
 	
-
 	if((movesMade == maxMoves) and !gameOver)
 		return 'L';
 	if(remaining()>0 and gameOver)
@@ -93,12 +101,13 @@ the playerGrid with labels
 string battleship::getGrid() const
 {
 	string board = "  1 2 3 4 5 6 7 8 9 10 \n";
+	
 	char alph = 65;
-	for(int c = 0; c < 10; c++){
+	for(int i = 0; i < ROWS; i++){
 		board += alph;
-		for(int r = 0; r < 10; r++){
+		for(int j = 0; j < COLUMNS; j++){
 			board += '|';
-			board += playerGrid[c][r];
+			board += playerGrid[i][j];
 		}
 		board += '|';
 		alph++;
@@ -107,10 +116,11 @@ string battleship::getGrid() const
 	return board;
 }
 /*---------------------------------------
-FUNCTION NAME:
-PARAMETER(S):
-RETURN TYPE:
-POSTCONDITION(S):
+FUNCTION NAME:remaining
+PARAMETER(S):none
+RETURN TYPE:int
+POSTCONDITION(S):returns the amount of moves the
+player has left. Max moves - movesmade; simple function
 ---------------------------------------*/
 int battleship::remaining() const
 {
