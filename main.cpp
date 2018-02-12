@@ -24,19 +24,23 @@ int main(){
 		char result = ship.fire(x,y);
 
 		if(result == 'E')
-			cout << "you out of range bro" << endl;
-		if(result == 'H')
-			cout << "you hit son" << endl;
-		if(result == 'M')
-			cout << "You missed son" << endl;
-
-		cout << "Current status:" << endl << ship.getGrid() << endl;
-
-		cout << "Ammo remaining: " << ship.remaining() << endl;;
+			cout << "Error" << endl << endl;
+			cin.clear();
+		if(result == 'H'){
+			cout << "you hit son" << endl << endl;
+			cout << "Current status:" << endl << ship.getGrid() << endl;
+			cout << "Ammo remaining: " << ship.remaining() << endl;;
+		}
+		if(result == 'M'){
+			cout << "You missed son" << endl << endl;
+			cout << "Current status:" << endl << ship.getGrid() << endl;
+			cout << "Ammo remaining: " << ship.remaining() << endl;;
+		}
 	}
-	if(ship.isOver() == 'L'){
-		cout <<"Die cock fucker";
-	}
+	if(ship.isOver() == 'W')
+		cout << endl << "u fucking won" << endl;
+	if(ship.isOver() == 'L')
+		cout << endl << "we lost u r garbage son " << endl;
 
 
 	return 0;

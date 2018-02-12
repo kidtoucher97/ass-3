@@ -43,7 +43,7 @@ char battleship::fire(char x, int y)
 	int a = x - 65;
 	y -= 1;
 	bool alreadyHit = false;
-	if(playerGrid[x][y] != ' ')
+	if(playerGrid[a][y] != ' ')
 		alreadyHit = true;
 
 	if(a > 9 or a < 0 or y > 9 or y < 0 or alreadyHit){
@@ -67,9 +67,18 @@ POSTCONDITION(S):
 ---------------------------------------*/
 char battleship::isOver() const
 {
-	if((movesMade == maxMoves)and(remaining() > 0))
+	bool gameOver = true;
+
+	for(int c = 0; c < ROWS; c++)
+		for(int j = 0; j < COLUMNS; j++)
+			if(solutionGrid[c][j] == true)
+				if(playerGrid[c][j] != 'X')
+					gameOver = false;
+	
+
+	if((movesMade == maxMoves) and !gameOver)
 		return 'L';
-	if(remaining() == 0)
+	if(remaining()>0 and gameOver)
 		return 'W';
 	else
 		return 'C';
