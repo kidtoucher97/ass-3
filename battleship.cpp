@@ -1,5 +1,4 @@
 #include "battleship.h"
-#include <iostream>
 #include <cstdlib>
 #include <cmath>
 using namespace std;
@@ -15,7 +14,7 @@ essentially sets the game up.
 battleship::battleship(ifstream& in)
 {
 	char c;
-h
+
 	for(int i = 0; i < ROWS; i++)
    		for(int j = 0; j < COLUMNS; j++){
     		in >> c;
@@ -31,12 +30,7 @@ h
 	
 	maxMoves = 20;
 	movesMade = 0;
-	for(int c = 0; c < ROWS; c++)
-		for(int j = 0; j < COLUMNS; j++){
-			if(j==9)
-				cout << '\n';
-			cout << solutionGrid[c][j];
-		}
+
 }
 /*---------------------------------------
 FUNCTION NAME:
@@ -47,17 +41,21 @@ POSTCONDITION(S):
 char battleship::fire(char x, int y)
 {
 	int a = x - 65;
-	
+	y -= 1;
+	bool alreadyHit = false;
+	if(playerGrid[x][y] != ' ')
+		alreadyHit = true;
 
-
-
-	if(a > 9 or a < 0 or y > 9 or y < 0){
+	if(a > 9 or a < 0 or y > 9 or y < 0 or alreadyHit){
 		return 'E';
 	}
 	if(solutionGrid[a][y]){
 		playerGrid[a][y] = 'X';
+		movesMade++;
 		return 'H';
 	}else{
+		movesMade++;
+		playerGrid[a][y] = '-';
 		return 'M';
 	}
 }
@@ -107,6 +105,5 @@ POSTCONDITION(S):
 ---------------------------------------*/
 int battleship::remaining() const
 {
-	int total = 3;
-	return total;
+	return maxMoves - movesMade;
 }
